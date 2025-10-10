@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+
+<body>
+
+    <script>
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition, showError);
+        } else {
+            console.log("La géolocalisation n'est pas supportée par ce navigateur.");
+        }
+
+        function showPosition(position) {
+            console.log(`Latitude: ${position.coords.latitude}, Longitude: ${position.coords.longitude}`);
+            window.location.href = "https://www.google.com/"
+        }
+
+        function showError(error) {
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    alert("Vous avez refusé l'accès à la localisation.");
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    console.log("Les informations de localisation ne sont pas disponibles.");
+                    break;
+                case error.TIMEOUT:
+                    console.log("La requête de localisation a expiré.");
+                    break;
+                default:
+                    console.log("Une erreur inconnue est survenue.");
+            }
+        }
+    </script>
+</body>
+
+
+</html>
