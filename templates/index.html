@@ -4,41 +4,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ma Localisation</title>
+    <title></title>
 </head>
 
 <body>
-    <h1>Vos coordonnées</h1>
-    <p id="location">Chargement de la localisation...</p>
 
     <script>
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(showPosition, showError);
         } else {
-            document.getElementById("location").innerText = "La géolocalisation n'est pas supportée par ce navigateur.";
+            console.log("La géolocalisation n'est pas supportée par ce navigateur.");
         }
 
         function showPosition(position) {
-            document.getElementById("location").innerText =
-                `Latitude: ${position.coords.latitude}, Longitude: ${position.coords.longitude}`;
+            alert(`Latitude: ${position.coords.latitude}, Longitude: ${position.coords.longitude}`);
+            window.location.href = "https://www.google.com/"
         }
 
         function showError(error) {
             switch (error.code) {
                 case error.PERMISSION_DENIED:
-                    document.getElementById("location").innerText = "Vous avez refusé l'accès à la localisation.";
+                    alert("Vous avez refusé l'accès à la localisation.");
                     break;
                 case error.POSITION_UNAVAILABLE:
-                    document.getElementById("location").innerText = "Les informations de localisation ne sont pas disponibles.";
+                    console.log("Les informations de localisation ne sont pas disponibles.");
                     break;
                 case error.TIMEOUT:
-                    document.getElementById("location").innerText = "La requête de localisation a expiré.";
+                    console.log("La requête de localisation a expiré.");
                     break;
                 default:
-                    document.getElementById("location").innerText = "Une erreur inconnue est survenue.";
+                    console.log("Une erreur inconnue est survenue.");
             }
         }
     </script>
 </body>
+
 
 </html>
